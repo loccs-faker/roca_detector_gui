@@ -1,0 +1,3 @@
+[console_scripts]
+Detector = Detector.detector:main
+

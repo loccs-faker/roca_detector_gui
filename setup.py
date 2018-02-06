@@ -11,7 +11,7 @@ install_requires = [
     'future',
     'coloredlogs',
     'pgpdump',
-    'python-dateutil',
+    'python-dateutil', 'past',
 ]
 apk_extras = [
     'apk_parse_ph4>=0.1.7',

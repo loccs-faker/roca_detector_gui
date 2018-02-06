@@ -1,0 +1,13 @@
+README.rst
+setup.py
+Detector/__init__.py
+Detector/detector.py
+Detector/process_github.py
+Detector/proxy.py
+Detector.egg-info/PKG-INFO
+Detector.egg-info/SOURCES.txt
+Detector.egg-info/dependency_links.txt
+Detector.egg-info/entry_points.txt
+Detector.egg-info/not-zip-safe
+Detector.egg-info/requires.txt
+Detector.egg-info/top_level.txt
