@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f966ebf5-ddb5-4c3e-b5d3-c39bc4a80f51" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Detector/__init__.py" afterPath="$PROJECT_DIR$/Detector/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Detector/result.txt" afterPath="$PROJECT_DIR$/Detector/result.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
-    </list>
+    <list default="true" id="f966ebf5-ddb5-4c3e-b5d3-c39bc4a80f51" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +18,8 @@
       <file leaf-file-name="detector.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Detector/detector.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="363" column="49" lean-forward="true" selection-start-line="363" selection-start-column="49" selection-end-line="363" selection-end-column="49" />
+            <state relative-caret-position="600">
+              <caret line="381" column="44" lean-forward="true" selection-start-line="381" selection-start-column="44" selection-end-line="381" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -608,8 +604,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Detector/detector.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="363" column="49" lean-forward="true" selection-start-line="363" selection-start-column="49" selection-end-line="363" selection-end-column="49" />
+        <state relative-caret-position="600">
+          <caret line="381" column="44" lean-forward="true" selection-start-line="381" selection-start-column="44" selection-end-line="381" selection-end-column="44" />
           <folding />
         </state>
       </provider>
