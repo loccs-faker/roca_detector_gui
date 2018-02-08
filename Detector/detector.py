@@ -52,6 +52,7 @@ from cryptography.x509.base import load_der_x509_csr
 from cryptography.hazmat.backends.openssl.x509 import _Certificate
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
 from cryptography.hazmat.primitives.serialization import load_ssh_public_key
+from ssl import get_server_certificate
 
 LOG_FORMAT = '%(asctime)s [%(process)d] %(levelname)s %(message)s'
 logger = logging.getLogger(__name__)
@@ -75,9 +76,9 @@ class MainGUI(object):
                                              wrap=tkinter.WORD)
         self.scr.place(x=19, y=50)
 
-        self.DetectBut = tkinter.Button(self.TabStrip1__Tab4, text='Detect', font='bold', borderwidth=2,
+        self.DetectBut4 = tkinter.Button(self.TabStrip1__Tab4, text='Detect', font='bold', borderwidth=2,
                                         command=self.detect_text)
-        self.DetectBut.place(x=190, y=230)
+        self.DetectBut4.place(x=190, y=230)
 
         self.TabStrip1.add(self.TabStrip1__Tab4, text='Paste key')
 
@@ -96,9 +97,9 @@ class MainGUI(object):
         self.ChoseBut = tkinter.Button(self.TabStrip1__Tab1, text='...', borderwidth=2, command=self.chose_file)
         self.ChoseBut.place(x=360, y=118)
 
-        self.DetectBut = tkinter.Button(self.TabStrip1__Tab1, text='Detect', font='bold', borderwidth=3,
+        self.DetectBut1 = tkinter.Button(self.TabStrip1__Tab1, text='Detect', font='bold', borderwidth=3,
                                         command=self.detect_file)
-        self.DetectBut.place(x=190, y=200)
+        self.DetectBut1.place(x=190, y=200)
 
         self.TabStrip1.add(self.TabStrip1__Tab1, text='Single file')
         #################
@@ -117,9 +118,9 @@ class MainGUI(object):
         self.ChoseBut = tkinter.Button(self.TabStrip1__Tab2, text='...', borderwidth=2, command=self.chose_directory)
         self.ChoseBut.place(x=360, y=118)
 
-        self.DetectBut = tkinter.Button(self.TabStrip1__Tab2, text='Detect', font='bold', borderwidth=3,
+        self.DetectBut2 = tkinter.Button(self.TabStrip1__Tab2, text='Detect', font='bold', borderwidth=3,
                                         command=self.detect_dir)
-        self.DetectBut.place(x=190, y=200)
+        self.DetectBut2.place(x=190, y=200)
 
         self.progress = Progressbar(self.TabStrip1__Tab2, length=200, mode='indeterminate')
 
@@ -127,21 +128,41 @@ class MainGUI(object):
         ##################
 
         self.TabStrip1__Tab3 = Frame(self.TabStrip1)
-        self.FilePathLabel3 = tkinter.Label(self.TabStrip1__Tab3, text='Your Github login name :',
+        self.Label3 = tkinter.Label(self.TabStrip1__Tab3, text='Your Github login name :',
                                             borderwidth=5, font=('', 10, 'bold'))
-        self.FilePathLabel3.place(x=30, y=60)
+        self.Label3.place(x=30, y=60)
 
         self.login_name_Entry = tkinter.Entry(self.TabStrip1__Tab3, borderwidth=4, width=40)
         self.login_name_Entry.place(x=30, y=120)
 
-        self.DetectBut = tkinter.Button(self.TabStrip1__Tab3, text='Detect', font='bold', borderwidth=3,
+        self.DetectBut3 = tkinter.Button(self.TabStrip1__Tab3, text='Detect', font='bold', borderwidth=3,
                                         command=self.detect_github_login_name)
-        self.DetectBut.place(x=190, y=200)
+        self.DetectBut3.place(x=190, y=200)
 
         self.progress_2 = Progressbar(self.TabStrip1__Tab3, length=200, mode='indeterminate')
 
         self.TabStrip1.add(self.TabStrip1__Tab3, text='Github account')
+        ###################
 
+        self.TabStrip1__Tab5 = Frame(self.TabStrip1)
+        self.label1 = tkinter.Label(self.TabStrip1__Tab5, text='URL and Port :',
+                                            borderwidth=5, font=('', 10, 'bold'))
+        self.label1.place(x=30, y=60)
+
+        self.url_entry = tkinter.Entry(self.TabStrip1__Tab5, borderwidth=5, width=30, state='normal')
+        self.url_entry.place(x=50, y=120)
+
+        self.label2 = tkinter.Label(self.TabStrip1__Tab5, text=':',
+                                            borderwidth=5, font=('', 10, 'bold'))
+        self.label2.place(x=275, y=115)
+        self.TabStrip1.add(self.TabStrip1__Tab5, text='TLS/SSL')
+
+        self.port_entry = tkinter.Entry(self.TabStrip1__Tab5, borderwidth=5, width=12)
+        self.port_entry.place(x=290, y=120)
+
+        self.DetectBut5 = tkinter.Button(self.TabStrip1__Tab5, text='Detect', font='bold', borderwidth=3,
+                                        command=self.detect_tls)
+        self.DetectBut5.place(x=190, y=200)
 
     def chose_file(self):
 
@@ -150,6 +171,28 @@ class MainGUI(object):
     def chose_directory(self):
 
         self.DirName.set(tkinter.filedialog.askdirectory())
+
+    def detect_tls(self):
+        host = self.url_entry.get()
+        if host == '':
+            tkinter.messagebox.showerror("Error","please input host address!")
+            return
+        port = int(self.port_entry.get()) if self.port_entry.get() != '' else 443
+        try:
+            pem_cert = get_server_certificate((host,port))
+            logger.info("Fetching server certificate from %s:%s" % (host, port))
+        except Exception as e:
+            logger.error('Error getting server certificate from %s:%s: %s' %
+                         (host, port, e))
+            tkinter.messagebox.showerror("Error","can't get server certificate!")
+            return
+        start5 = Detector()
+        result5 = start5.process_pem_certificate(pem_cert,host,0)
+        if result5 is None:
+            tkinter.messagebox.showinfo("result","No fingerprinted keys found (OK)！")
+        else:
+            tkinter.messagebox.showwarning("warning","WARNING: Potential vulnerability!")
+        return
 
     def detect_text(self):
         start0 = Detector()
@@ -165,6 +208,9 @@ class MainGUI(object):
     def detect_file(self):
         start1 = Detector()
         # print self.FileName.get()
+        if self.FileName.get() == '':
+            tkinter.messagebox.showerror("Error","Please chose correct files!")
+            return
         result1 = start1.main(self.FileName.get(), True)
         self.show_result(result1)
         return
@@ -178,10 +224,12 @@ class MainGUI(object):
             result2 = start2.main(self.DirName.get(), False)
             self.progress.stop()
             self.progress.place_forget()
-            self.DetectBut['state'] = 'normal'
+            self.DetectBut2['state'] = 'normal'
             self.show_result(result2)
-
-        self.DetectBut['state'] = 'disabled'
+        if self.DirName.get() == '':
+            tkinter.messagebox.showerror("Error","please chose correct directory!")
+            return
+        self.DetectBut2['state'] = 'disabled'
         threading.Thread(target=real_traitement).start()
 
     def detect_github_login_name(self):
@@ -189,17 +237,24 @@ class MainGUI(object):
             self.progress_2.place(x=135, y=235)
             self.progress_2.start()
             login_name = self.login_name_Entry.get()
+            if login_name == '':
+                self.progress_2.stop()
+                self.progress_2.place_forget()
+                self.DetectBut3['state'] = 'normal'
+                tkinter.messagebox.showerror("Error","Please input correct login name！")
+                return
             start3 = Detector()
             result3 = start3.process_github(login_name)
             self.progress_2.stop()
             self.progress_2.place_forget()
-            self.DetectBut['state'] = 'normal'
+            self.DetectBut3['state'] = 'normal'
             if result3:
                 tkinter.messagebox.showwarning("Warning", " SSH keys associated with your account are in danger!")
-            elif not result3:
+            elif result3 is False:
                 tkinter.messagebox.showinfo(title='Result', message='your github account is ok!')
-
-        self.DetectBut['state'] = 'disabled'
+            elif result3 is None:
+                return
+        self.DetectBut3['state'] = 'disabled'
         threading.Thread(target=real_traitement).start()
 
     @staticmethod
