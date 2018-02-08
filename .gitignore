@@ -1,4 +1,4 @@
 *.pyc
 .idea/
 Detector.egg-info/
-
+README.rst
