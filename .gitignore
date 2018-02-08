@@ -2,3 +2,5 @@
 .idea/
 Detector.egg-info/
 README.rst
+dist/
+result.txt

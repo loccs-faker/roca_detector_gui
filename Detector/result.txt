@@ -1,8 +1,3 @@
 file name			idx
 
-ssh06.pub			0
-cert05.pem			0
 cert04.pem			0
-privkey05.pem			0
-key04.pgp			0
-pubkey03.pem			0

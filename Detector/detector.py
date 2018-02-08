@@ -30,8 +30,8 @@ import coloredlogs
 
 try:
     from tkinter.ttk import *
-except:
-    print('\nErrors occured when importing module \'tkinter\',try\'sudo apt-get install python-tk\'\n')
+except Exception as e:
+    print('\nErrors occured when importing module \'tkinter\',try\'sudo apt-get install python-tk\',%s\n' % e)
     exit()
 from tkinter import StringVar
 from tkinter import messagebox
@@ -77,7 +77,7 @@ class MainGUI(object):
         self.scr.place(x=19, y=50)
 
         self.DetectBut4 = tkinter.Button(self.TabStrip1__Tab4, text='Detect', font='bold', borderwidth=2,
-                                        command=self.detect_text)
+                                         command=self.detect_text)
         self.DetectBut4.place(x=190, y=230)
 
         self.TabStrip1.add(self.TabStrip1__Tab4, text='Paste key')
@@ -98,7 +98,7 @@ class MainGUI(object):
         self.ChoseBut.place(x=360, y=118)
 
         self.DetectBut1 = tkinter.Button(self.TabStrip1__Tab1, text='Detect', font='bold', borderwidth=3,
-                                        command=self.detect_file)
+                                         command=self.detect_file)
         self.DetectBut1.place(x=190, y=200)
 
         self.TabStrip1.add(self.TabStrip1__Tab1, text='Single file')
@@ -119,7 +119,7 @@ class MainGUI(object):
         self.ChoseBut.place(x=360, y=118)
 
         self.DetectBut2 = tkinter.Button(self.TabStrip1__Tab2, text='Detect', font='bold', borderwidth=3,
-                                        command=self.detect_dir)
+                                         command=self.detect_dir)
         self.DetectBut2.place(x=190, y=200)
 
         self.progress = Progressbar(self.TabStrip1__Tab2, length=200, mode='indeterminate')
@@ -129,14 +129,14 @@ class MainGUI(object):
 
         self.TabStrip1__Tab3 = Frame(self.TabStrip1)
         self.Label3 = tkinter.Label(self.TabStrip1__Tab3, text='Your Github login name :',
-                                            borderwidth=5, font=('', 10, 'bold'))
+                                    borderwidth=5, font=('', 10, 'bold'))
         self.Label3.place(x=30, y=60)
 
         self.login_name_Entry = tkinter.Entry(self.TabStrip1__Tab3, borderwidth=4, width=40)
         self.login_name_Entry.place(x=30, y=120)
 
         self.DetectBut3 = tkinter.Button(self.TabStrip1__Tab3, text='Detect', font='bold', borderwidth=3,
-                                        command=self.detect_github_login_name)
+                                         command=self.detect_github_login_name)
         self.DetectBut3.place(x=190, y=200)
 
         self.progress_2 = Progressbar(self.TabStrip1__Tab3, length=200, mode='indeterminate')
@@ -146,14 +146,14 @@ class MainGUI(object):
 
         self.TabStrip1__Tab5 = Frame(self.TabStrip1)
         self.label1 = tkinter.Label(self.TabStrip1__Tab5, text='URL and Port :',
-                                            borderwidth=5, font=('', 10, 'bold'))
+                                    borderwidth=5, font=('', 10, 'bold'))
         self.label1.place(x=30, y=60)
 
         self.url_entry = tkinter.Entry(self.TabStrip1__Tab5, borderwidth=5, width=30, state='normal')
         self.url_entry.place(x=50, y=120)
 
         self.label2 = tkinter.Label(self.TabStrip1__Tab5, text=':',
-                                            borderwidth=5, font=('', 10, 'bold'))
+                                    borderwidth=5, font=('', 10, 'bold'))
         self.label2.place(x=275, y=115)
         self.TabStrip1.add(self.TabStrip1__Tab5, text='TLS/SSL')
 
@@ -161,7 +161,7 @@ class MainGUI(object):
         self.port_entry.place(x=290, y=120)
 
         self.DetectBut5 = tkinter.Button(self.TabStrip1__Tab5, text='Detect', font='bold', borderwidth=3,
-                                        command=self.detect_tls)
+                                         command=self.detect_tls)
         self.DetectBut5.place(x=190, y=200)
 
     def chose_file(self):
@@ -175,23 +175,23 @@ class MainGUI(object):
     def detect_tls(self):
         host = self.url_entry.get()
         if host == '':
-            tkinter.messagebox.showerror("Error","please input host address!")
+            tkinter.messagebox.showerror("Error", "please input host address!")
             return
         port = int(self.port_entry.get()) if self.port_entry.get() != '' else 443
         try:
-            pem_cert = get_server_certificate((host,port))
+            pem_cert = get_server_certificate((host, port))
             logger.info("Fetching server certificate from %s:%s" % (host, port))
-        except Exception as e:
+        except Exception as e0:
             logger.error('Error getting server certificate from %s:%s: %s' %
-                         (host, port, e))
-            tkinter.messagebox.showerror("Error","can't get server certificate!")
+                         (host, port, e0))
+            tkinter.messagebox.showerror("Error", "can't get server certificate!")
             return
         start5 = Detector()
-        result5 = start5.process_pem_certificate(pem_cert,host,0)
+        result5 = start5.process_pem_certificate(pem_cert, host, 0)
         if result5 is None:
-            tkinter.messagebox.showinfo("result","No fingerprinted keys found (OK)！")
+            tkinter.messagebox.showinfo("result", "No fingerprinted keys found (OK)！")
         else:
-            tkinter.messagebox.showwarning("warning","WARNING: Potential vulnerability!")
+            tkinter.messagebox.showwarning("warning", "WARNING: Potential vulnerability!")
         return
 
     def detect_text(self):
@@ -209,7 +209,7 @@ class MainGUI(object):
         start1 = Detector()
         # print self.FileName.get()
         if self.FileName.get() == '':
-            tkinter.messagebox.showerror("Error","Please chose correct files!")
+            tkinter.messagebox.showerror("Error", "Please chose correct files!")
             return
         result1 = start1.main(self.FileName.get(), True)
         self.show_result(result1)
@@ -226,8 +226,9 @@ class MainGUI(object):
             self.progress.place_forget()
             self.DetectBut2['state'] = 'normal'
             self.show_result(result2)
+
         if self.DirName.get() == '':
-            tkinter.messagebox.showerror("Error","please chose correct directory!")
+            tkinter.messagebox.showerror("Error", "please chose correct directory!")
             return
         self.DetectBut2['state'] = 'disabled'
         threading.Thread(target=real_traitement).start()
@@ -241,7 +242,7 @@ class MainGUI(object):
                 self.progress_2.stop()
                 self.progress_2.place_forget()
                 self.DetectBut3['state'] = 'normal'
-                tkinter.messagebox.showerror("Error","Please input correct login name！")
+                tkinter.messagebox.showerror("Error", "Please input correct login name！")
                 return
             start3 = Detector()
             result3 = start3.process_github(login_name)
@@ -254,6 +255,7 @@ class MainGUI(object):
                 tkinter.messagebox.showinfo(title='Result', message='your github account is ok!')
             elif result3 is None:
                 return
+
         self.DetectBut3['state'] = 'disabled'
         threading.Thread(target=real_traitement).start()
 
@@ -442,8 +444,8 @@ class Detector(object):
         if num_type == 'base64':
             try:
                 num = int(base64.b16encode(base64.b64decode(data)), 16)
-            except:
-                logger.warning('Exception in testing modulus %s\n' % data)
+            except Exception as e1:
+                logger.warning('Exception in testing modulus %s:%s\n' % (data, e1))
                 return False
         elif num_type == 'hex':
             num = int(prefix_hex(data), 16)
@@ -549,8 +551,8 @@ class Detector(object):
 
                 return find
             return None
-        except:
-            logger.error("error when process the pem_certificate request file '%s'\n" % fname)
+        except Exception as e2:
+            logger.error("error when process the pem_certificate request file '%s' %s\n" % (fname, e2))
             return None
 
     def process_pem_certificate(self, data, fname, idx):
@@ -576,8 +578,8 @@ class Detector(object):
 
                 return find
             return None
-        except:
-            logger.error("error when process the pem_certificate file '%s'\n" % fname)
+        except Exception as e3:
+            logger.error("error when process the pem_certificate file '%s':%s\n" % (fname, e3))
             return None
 
     def process_pem_rsakeys(self, data, fname, idx):
@@ -608,8 +610,8 @@ class Detector(object):
                 find['idx'] = idx
                 return find
             return None
-        except:
-            logger.error("error when process the pem_rsakeys file '%s'\n" % fname)
+        except Exception as e4:
+            logger.error("error when process the pem_rsakeys file '%s':%s\n" % (fname, e4))
             return None
 
     def process_pgp(self, data, fname):
@@ -655,8 +657,8 @@ class Detector(object):
                 return ret
             else:
                 return None
-        except:
-            logger.error("error when process the pgp file '%s'\n" % fname)
+        except Exception as e5:
+            logger.error("error when process the pgp file '%s':%s\n" % (fname, e5))
             return None
 
     def process_der(self, data, fname):
@@ -683,8 +685,8 @@ class Detector(object):
 
                 return ret
             return None
-        except:
-            logger.error("error when process the der file '%s'\n" % fname)
+        except Exception as e6:
+            logger.error("error when process the der file '%s':%s\n" % (fname, e6))
             return None
 
     def process_ssh(self, data, fname=None):
@@ -725,8 +727,8 @@ class Detector(object):
                 return ret
             else:
                 return None
-        except:
-            logger.error("error when process the ssh file '%s'\n" % fname)
+        except Exception as e7:
+            logger.error("error when process the ssh file '%s':%s\n" % (fname, e7))
             return None
 
     def process_pkcs7(self, data, fname):
@@ -769,8 +771,8 @@ class Detector(object):
 
                 return ret
             return None
-        except:
-            logger.error("error when process the pkcs7 file '%s'\n" % fname)
+        except Exception as e8:
+            logger.error("error when process the pkcs7 file '%s':%s\n" % (fname, e8))
             return None
 
     def process_apk(self, data, fname):
@@ -783,10 +785,10 @@ class Detector(object):
         """
         try:
             from apk_parse.apk import APK
-        except:
+        except Exception as e9:
             logger.error(
                 "error when import APK, try 'pip install apk_parse_ph4'. If still failed,try 'pip uninstall M2Crypto',"
-                "then 'sudo apt-get install m2crypto'and retry '%s'\n" % fname)
+                "then 'sudo apt-get install m2crypto'and retry '%s': %s\n" % (fname, e9))
             return None
         ret = []
         apk = APK(data, process_now=False, process_file_types=False, raw=True, temp_dir='.')
@@ -946,7 +948,8 @@ class PohligHellman(object):
                     break
         return order
 
-    def discrete_log(self, n, generator, generator_order, generator_order_factorization, modulus):
+    @staticmethod
+    def discrete_log(n, generator, generator_order, generator_order_factorization, modulus):
         """
         the main part of pohlig-hellman algrithm 
         return true if find the solution
