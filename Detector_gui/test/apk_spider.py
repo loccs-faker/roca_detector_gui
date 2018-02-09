@@ -8,7 +8,7 @@ import re
 import os
 import requests
 from pyquery import PyQuery
-from Detector.detector import Detector
+from Detector_gui.detector import Detector
 from HTMLParser import HTMLParser
 
 PAGE_START = 1

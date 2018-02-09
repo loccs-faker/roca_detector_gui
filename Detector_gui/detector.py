@@ -410,6 +410,7 @@ class Detector(object):
         :param data: content of text box
         :return:
         """
+        data = data.strip()
         if startswith(data, '-----BEGIN CER') or startswith(data, '-----BEGIN RSA') or \
                 startswith(data, '-----BEGIN PUB') or startswith(data, '-----BEGIN PRI'):
             return self.process_pem(data, None)
@@ -419,16 +420,34 @@ class Detector(object):
             return self.process_ssh(data, None)
         elif startswith(data, '-----BEGIN PKCS7'):
             return self.process_pkcs7(data, None)
+        false1 = True
+        false2 = True
+        false3 = True
+        find_flag = False
         if re.match(r'^[a-zA-Z0-9+/=\s\t]+$', data):
-            ret = self.process_raw_mod(data, 'base64')
-            if ret is not False:
-                return ret
-        if re.match(r'^(0x)[a-fA-F0-9\s\t]+$', data):
-            return self.process_raw_mod(data, 'hex')
+            ret1 = self.process_raw_mod(data, 'base64')
+            if ret1 is not False:
+                false1 = False
+            if ret1 is True:
+                find_flag = True
+        if re.match(r'^(0x)?[a-fA-F0-9\s\t]+$', data):
+            ret2 = self.process_raw_mod(data, 'hex')
+            if ret2 is not False:
+                false2 = False
+            if ret2 is True:
+                find_flag = True
         if re.match(r'^[0-9\s\t]+$', data):
-            return self.process_raw_mod(data, 'decimal')
+            ret3 =  self.process_raw_mod(data, 'decimal')
+            if ret3 is not False:
+                false3 = False
+            if ret3 is True:
+                find_flag = True
+        if false1 and false2 and false3:
+            return False  # Format is wrong
+        if find_flag:
+            return find_flag  # WARNING: Potential vulnerability
         else:
-            return False
+            return None  # No fingerprinted keys found (OK)
 
     def process_raw_mod(self, data, num_type):
         """
@@ -454,8 +473,10 @@ class Detector(object):
         if num % 2 == 0:
             return False  # format is wrong
         if self.pohlig_hellman_detect(num):
+            logger.info('WARNING: Potential vulnerability. processed as %s\n' % num_type)
             return True  # find vulnerable keys
         else:
+            logger.info('No fingerprinted keys found (OK). processed as %s\n' % num_type)
             return None  # key is safe
 
     def process_file(self, data, fname):

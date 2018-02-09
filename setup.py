@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
-PACKAGE = "Detector"
-NAME = "Detector"
+PACKAGE = "Detector_gui"
+NAME = "Detector_gui"
 DESCRIPTION = "vunerable rsa keys detector"
 AUTHOR = "Cao Pei"
 AUTHOR_EMAIL = "970379828@qq.com"
@@ -47,7 +47,7 @@ setup(
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'Detector = Detector.detector:main',
+            'Detector_gui = Detector_gui.detector:main',
         ],
     }
 )

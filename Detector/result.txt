@@ -1,3 +1,0 @@
-file name			idx
-
-cert04.pem			0
