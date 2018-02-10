@@ -12,11 +12,13 @@ def get_keys(file_name):
         return
     keys = []
     with open(file_name, 'r') as f:
-
-        for line in f:
+        f.readline()
+        while True:
+            line = f.readline()
             if line.strip() != '':
                 keys.append(line.split(';')[1])
-
+            else:
+                break
     return keys
 
 

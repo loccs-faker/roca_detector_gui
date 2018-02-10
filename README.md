@@ -23,7 +23,7 @@ Currently the tool supports the following key formats:
 Install the detector library + tool with `pip` (installs all dependencies):
 
 ```
-pip install Detector
+pip install roca_gui
 ```
 
 ## Dependencies

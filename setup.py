@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
-PACKAGE = "Detector_gui"
-NAME = "Detector_gui"
+PACKAGE = "roca_gui"
+NAME = "roca_gui"
 DESCRIPTION = "vunerable rsa keys detector"
 AUTHOR = "Cao Pei"
 AUTHOR_EMAIL = "970379828@qq.com"
@@ -11,7 +11,7 @@ install_requires = [
     'future',
     'coloredlogs',
     'pgpdump',
-    'python-dateutil', 'past',
+    'python-dateutil',
 ]
 apk_extras = [
     'apk_parse_ph4>=0.1.7',
@@ -47,7 +47,7 @@ setup(
     zip_safe=False,
     entry_points={
         'console_scripts': [
-            'Detector_gui = Detector_gui.detector:main',
+            'roca_gui = roca_gui.detector:main',
         ],
     }
 )
