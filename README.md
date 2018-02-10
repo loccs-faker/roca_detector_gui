@@ -38,6 +38,6 @@ sudo apt-get install python-pip python-dev python-tk build-essential libssl-dev 
 
 ## Usage
 
-excute 'Detector' in terminal 
+run 'roca_gui' in terminal 
 
 
