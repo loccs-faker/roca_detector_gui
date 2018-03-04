@@ -5,7 +5,7 @@ DESCRIPTION = "vunerable rsa keys detector"
 AUTHOR = "Cao Pei"
 AUTHOR_EMAIL = "970379828@qq.com"
 install_requires = [
-    'cryptography',
+    'cryptography>=1.2.4',
     'setuptools>=1.0',
     'six',
     'future',
